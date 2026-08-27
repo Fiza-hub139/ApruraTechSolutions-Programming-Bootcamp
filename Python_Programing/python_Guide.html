@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Core Fundamentals - Student Course Pack</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-sidebar: #1e293b;
+            --bg-card: #1e293b;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-amber: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --code-bg: #090d16;
+            --callout-bg: rgba(59, 130, 246, 0.1);
+            --warning-bg: rgba(245, 158, 11, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 300px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            height: 100vh;
+            padding: 2rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.1rem;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .sidebar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: block;
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+        }
+
+        .sidebar a:hover {
+            color: var(--text-main);
+            background: rgba(59, 130, 246, 0.15);
+            transform: translateX(4px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 300px;
+            padding: 3rem;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Module Card Structure */
+        .module-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .module-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .theory-section {
+            margin-bottom: 2rem;
+        }
+
+        .theory-section h3 {
+            font-size: 1.2rem;
+            color: var(--accent-green);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .theory-section p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        /* Concept Callout Box */
+        .callout {
+            background: var(--callout-bg);
+            border-left: 4px solid var(--accent-blue);
+            padding: 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .callout-title {
+            font-weight: bold;
+            color: var(--accent-blue);
+            margin-bottom: 0.4rem;
+        }
+
+        /* Pitfall Warning Box */
+        .warning-box {
+            background: var(--warning-bg);
+            border-left: 4px solid var(--accent-amber);
+            padding: 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .warning-title {
+            font-weight: bold;
+            color: var(--accent-amber);
+            margin-bottom: 0.4rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th,
+        td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: var(--accent-blue);
+        }
+
+        td {
+            color: var(--text-muted);
+        }
+
+        /* Code Block */
+        .code-container {
+            margin: 1.5rem 0;
+        }
+
+        .code-header {
+            background-color: #0f172a;
+            padding: 0.6rem 1rem;
+            border-radius: 8px 8px 0 0;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            font-family: monospace;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0 0 8px 8px;
+            padding: 1.2rem;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Consolas', 'Fira Code', monospace;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .keyword {
+            color: #f472b6;
+        }
+
+        .string {
+            color: #a5f3fc;
+        }
+
+        .comment {
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .function {
+            color: #60a5fa;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Course Syllabus</h2>
+            <p>Instructor Theory & Code Pack</p>
+        </div>
+        <ul>
+            <li><a href="#module1">Module 1: Syntax & Variables</a></li>
+            <li><a href="#module2">Module 2: Decision Making</a></li>
+            <li><a href="#module3">Module 3: Data Structures & Loops</a></li>
+            <li><a href="#module4">Module 4: Functions & Scope</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header>
+            <h1>Python Core Fundamentals</h1>
+            <p>Complete theoretical manual, structural diagrams, syntax rules, and runnable code examples for course
+                instruction.</p>
+        </header>
+
+        <!-- Module 1 -->
+        <section id="module1" class="module-card">
+            <span class="module-badge">Week 1 Theory</span>
+            <h2>Module 1: Language Syntax, Data Types & I/O</h2>
+
+            <div class="theory-section">
+                <h3>1. Memory & Data Types</h3>
+                <p>Python is a dynamic, high-level language. Variables act as reference tags pointing to objects in
+                    computer memory, rather than fixed static containers.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data Type</th>
+                            <th>Python Class</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Integer</td>
+                            <td><code>int</code></td>
+                            <td>Whole numbers (positive or negative) without decimals.</td>
+                            <td><code>42</code>, <code>-10</code></td>
+                        </tr>
+                        <tr>
+                            <td>Float</td>
+                            <td><code>float</code></td>
+                            <td>Real numbers written with a decimal point.</td>
+                            <td><code>3.14</code>, <code>-0.5</code></td>
+                        </tr>
+                        <tr>
+                            <td>String</td>
+                            <td><code>str</code></td>
+                            <td>Textual sequence wrapped in single or double quotes.</td>
+                            <td><code>"Python"</code></td>
+                        </tr>
+                        <tr>
+                            <td>Boolean</td>
+                            <td><code>bool</code></td>
+                            <td>Truth value representing logic.</td>
+                            <td><code>True</code>, <code>False</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout">
+                    <div class="callout-title">Instructor Note: The Type Conversion Rule</div>
+                    <p>The <code>input()</code> function always returns user entry as a <strong>string</strong>
+                        (<code>str</code>). Explicit type casting (e.g., <code>int()</code> or <code>float()</code>) is
+                        required prior to arithmetic operations.</p>
+                </div>
+
+                <div class="warning-box">
+                    <div class="warning-title">Common Student Mistake</div>
+                    <p>Trying to concatenate a string with an integer without casting: <code>"Age: " + 25</code> causes
+                        a <strong>TypeError</strong>. Teach formatted f-strings (<code>f"Age: {age}"</code>) early to
+                        avoid this.</p>
+                </div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header"><span>module_1_demo.py</span><span>Python 3.x</span></div>
+                <pre><code><span class="comment"># Output and Formatting</span>
+name = <span class="string">"Sara"</span>
+birth_year = 2004
+current_year = 2026
+
+<span class="comment"># Type Casting input from String to Integer</span>
+user_age_input = input(<span class="string">"Enter your age: "</span>)
+age_num = int(user_age_input)
+
+<span class="comment"># String Formatting using F-Strings</span>
+print(f<span class="string">"Hello {name}, in {current_year} your calculated age is {current_year - birth_year}."</span>)</code></pre>
+            </div>
+        </section>
+
+        <!-- Module 2 -->
+        <section id="module2" class="module-card">
+            <span class="module-badge">Week 2 Theory</span>
+            <h2>Module 2: Control Flow & Boolean Logic</h2>
+
+            <div class="theory-section">
+                <h3>1. Conditional Evaluation Flow</h3>
+                <p>Execution flows sequentially top-to-bottom unless altered by conditional structures. Python relies
+                    strictly on <strong>indentation</strong> (4 spaces) to define code blocks instead of curly braces
+                    <code>{}</code>.
+                </p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Meaning</th>
+                            <th>Logical Operators</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>==</code></td>
+                            <td>Is equal to</td>
+                            <td><code>and</code> (Both conditions must be True)</td>
+                        </tr>
+                        <tr>
+                            <td><code>!=</code></td>
+                            <td>Is not equal to</td>
+                            <td><code>or</code> (At least one condition must be True)</td>
+                        </tr>
+                        <tr>
+                            <td><code>&gt; / &lt;</code></td>
+                            <td>Greater / Less than</td>
+                            <td><code>not</code> (Inverts boolean truth value)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="warning-box">
+                    <div class="warning-title">Critical Distinction: = vs ==</div>
+                    <p>A single equals sign <code>=</code> is an <strong>assignment operator</strong>. A double equals
+                        sign <code>==</code> is a <strong>comparison operator</strong>. Confusing these causes syntax
+                        errors.</p>
+                </div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header"><span>module_2_demo.py</span><span>Python 3.x</span></div>
+                <pre><code><span class="comment"># Decision Tree Logic</span>
+score = float(input(<span class="string">"Enter test percentage (0-100): "</span>))
+
+<span class="keyword">if</span> score >= 90:
+    grade = <span class="string">"A"</span>
+<span class="keyword">elif</span> score >= 75:
+    grade = <span class="string">"B"</span>
+<span class="keyword">elif</span> score >= 50:
+    grade = <span class="string">"C"</span>
+<span class="keyword">else</span>:
+    grade = <span class="string">"F"</span>
+
+print(f<span class="string">"Final Evaluation Grade: {grade}"</span>)</code></pre>
+            </div>
+        </section>
+
+        <!-- Module 3 -->
+        <section id="module3" class="module-card">
+            <span class="module-badge">Week 3 Theory</span>
+            <h2>Module 3: Data Structures & Iteration Mechanics</h2>
+
+            <div class="theory-section">
+                <h3>1. Python Lists (Sequence Types)</h3>
+                <p>Lists are ordered, mutable collections capable of storing heterogeneous data types. Indexes start at
+                    <strong>0</strong>.
+                </p>
+
+                <div class="callout">
+                    <div class="callout-title">Iteration Types: For vs While</div>
+                    <p>Use a <code>for</code> loop when iterating over a known sequence or range. Use a
+                        <code>while</code> loop when repetition depends on a dynamic condition evaluated at runtime.
+                    </p>
+                </div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header"><span>module_3_demo.py</span><span>Python 3.x</span></div>
+                <pre><code><span class="comment"># List Operations & Loop Structures</span>
+inventory = [<span class="string">"Laptop"</span>, <span class="string">"Mouse"</span>, <span class="string">"Keyboard"</span>]
+
+<span class="comment"># Modifying a List</span>
+inventory.append(<span class="string">"Monitor"</span>)
+
+<span class="comment"># Definite Loop (For)</span>
+print(<span class="string">"Current Hardware List:"</span>)
+<span class="keyword">for</span> index, item <span class="keyword">in</span> enumerate(inventory, start=1):
+    print(f<span class="string">"{index}. {item}"</span>)
+
+<span class="comment"># Indefinite Loop (While)</span>
+counter = 3
+<span class="keyword">while</span> counter > 0:
+    print(f<span class="string">"Countdown: {counter}"</span>)
+    counter -= 1</code></pre>
+            </div>
+        </section>
+
+        <!-- Module 4 -->
+        <section id="module4" class="module-card">
+            <span class="module-badge">Week 4 Theory</span>
+            <h2>Module 4: Functions & Modular Design</h2>
+
+            <div class="theory-section">
+                <h3>1. Function Anatomy & Scope</h3>
+                <p>Functions isolate computational logic into reusable units. They accept <strong>parameters</strong>
+                    (inputs) and return output values using the <code>return</code> keyword.</p>
+
+                <div class="warning-box">
+                    <div class="warning-title">Variable Scope Warning</div>
+                    <p>Variables declared inside a function exist only within that local scope. Attempting to access
+                        local variables outside the function raises a <strong>NameError</strong>.</p>
+                </div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header"><span>module_4_demo.py</span><span>Python 3.x</span></div>
+                <pre><code><span class="comment"># Defining Functions with Parameters and Return Values</span>
+
+<span class="keyword">def</span> <span class="function">calculate_tax</span>(subtotal, tax_rate=0.05):
+    <span class="string">"""Calculates total price including tax."""</span>
+    tax_amount = subtotal * tax_rate
+    total = subtotal + tax_amount
+    <span class="keyword">return</span> total
+
+<span class="comment"># Invoking the function</span>
+bill_amount = 150.00
+final_bill = calculate_tax(bill_amount)
+
+print(f<span class="string">"Original Bill: ${bill_amount} | Final Bill (with tax): ${final_bill}"</span>)</code></pre>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+
+</html>
