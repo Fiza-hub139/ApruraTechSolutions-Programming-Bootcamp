@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Programming Beginner Quiz</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-dark: #172554;
+            --secondary: #0f766e;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --accent: #e0f2fe;
+            --danger: #dc2626;
+            --border: #d1d5db;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 750px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: var(--secondary);
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Start Screen */
+        .rules-card {
+            background-color: var(--accent);
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn:active {
+            transform: scale(0.99);
+        }
+
+        /* Quiz Screen */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: var(--accent);
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .timer-box {
+            font-weight: bold;
+            color: var(--danger);
+            font-size: 1.1rem;
+            background: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .question-box {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            margin: 10px 0 15px 0;
+            overflow-x: auto;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background-color: white;
+            border: 2px solid var(--border);
+            padding: 12px 15px;
+            border-radius: 6px;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background-color: #f8fafc;
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary);
+            background-color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Results Screen */
+        .score-card {
+            text-align: center;
+            padding: 20px;
+            background: var(--accent);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .score-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .motivation-box {
+            background-color: #f0fdf4;
+            border-left: 5px solid var(--secondary);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* Collapsible Answer Key */
+        .accordion-btn {
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+            padding: 14px 18px;
+            width: 100%;
+            border: none;
+            border-radius: 6px;
+            text-align: left;
+            outline: none;
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .accordion-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .accordion-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: #ffffff;
+            border-radius: 0 0 6px 6px;
+        }
+
+        .accordion-content.open {
+            padding-top: 10px;
+        }
+
+        .key-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .key-table th, .key-table td {
+            border: 1px solid var(--border);
+            padding: 8px;
+            text-align: center;
+        }
+
+        .key-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .key-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>C++ Programming Beginner Quiz</h1>
+        <div class="subtitle">30 Questions | Fundamentals & Code Snippets</div>
+    </header>
+
+    <!-- START SCREEN -->
+    <div id="start-screen" class="screen active">
+        <div class="rules-card">
+            <strong>📌 Rules & Instructions:</strong>
+            <ul>
+                <li><strong>Timer:</strong> Exactly 20 seconds allowed per question[cite: 1].</li>
+                <li><strong>Auto-Advance:</strong> Next question appears automatically after 20s[cite: 1].</li>
+                <li><strong>Topics:</strong> Basics, Decision Making, Logic, and Loops[cite: 1].</li>
+            </ul>
+        </div>
+        <form id="start-form">
+            <div class="form-group">
+                <label for="username">Enter Your Full Name to Begin:</label>
+                <input type="text" id="username" placeholder="e.g., Jane Doe" required>
+            </div>
+            <button type="submit" class="btn">Start Quiz Now</button>
+        </form>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen" class="screen">
+        <div class="quiz-header">
+            <span id="topic-badge" style="font-size:0.85rem; font-weight:bold; color:var(--primary);">Module</span>
+            <span id="question-tracker">Question 1/30</span>
+            <div class="timer-box">⏱️ <span id="timer">20</span>s</div>
+        </div>
+
+        <div id="question-text" class="question-box"></div>
+        <div id="code-block"></div>
+        <div id="options-container" class="options-container"></div>
+
+        <button id="next-btn" class="btn" style="width:auto; float:right;">Next Question</button>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div id="results-screen" class="screen">
+        <div class="score-card">
+            <h2>Quiz Results</h2>
+            <p>Candidate: <strong id="res-name">User</strong></p>
+            <div class="score-number" id="res-score">0 / 30</div>
+            <p id="res-percentage">0%</p>
+        </div>
+
+        <div class="motivation-box">
+            <strong>🌟 A Message For Your Journey:</strong>
+            <p id="motivation-text"></p>
+        </div>
+
+        <!-- Collapsible Answer Key -->
+        <button type="button" class="accordion-btn" id="toggle-key-btn">
+            <span>🔑 View Answer Sheet</span>
+            <span id="arrow-icon">▼</span>
+        </button>
+        <div class="accordion-content" id="accordion-content">
+            <table class="key-table">
+                <thead>
+                    <tr>
+                        <th>Q#</th><th>Your Ans</th><th>Correct</th><th>Q#</th><th>Your Ans</th><th>Correct</th>
+                    </tr>
+                </thead>
+                <tbody id="answer-key-body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        // Basics
+        { num: 1, topic: "Basics", q: "Which of the following is the correct file extension for a C++ source file?", opts: ["A) .cp", "B) .cpp", "C) .c", "D) .exe"], ans: 1 },
+        { num: 2, topic: "Basics", q: "Which symbol is used for single-line comments in C++?", opts: ["A) /*", "B) #", "C) //", "D) <!--"], ans: 2 },
+        { num: 3, topic: "Basics", q: "Which data type is used to store fractional numbers with single precision?", opts: ["A) int", "B) char", "C) float", "D) bool"], ans: 2 },
+        { num: 4, topic: "Basics", q: "What is the correct syntax to output 'Hello World' in C++?", opts: ["A) Console.WriteLine(\"Hello World\");", "B) System.out.println(\"Hello World\");", "C) cout << \"Hello World\";", "D) print(\"Hello World\");"], ans: 2 },
+        { num: 5, topic: "Basics", q: "Which keyword is used to declare a variable whose value cannot be modified?", opts: ["A) static", "B) const", "C) fixed", "D) final"], ans: 1 },
+        { num: 6, topic: "Basics", q: "What is the output of the expression: 7 % 3?", opts: ["A) 2", "B) 1", "C) 2.33", "D) 0"], ans: 1 },
+        { num: 7, topic: "Basics", q: "Which of the following is an invalid variable name in C++?", opts: ["A) _myVar", "B) my_Var2", "C) 2ndVariable", "D) myVariable"], ans: 2 },
+        { num: 8, topic: "Basics", q: "Predict the output of the following code snippet:", code: "int x = 5;\ncout << x++;", opts: ["A) 5", "B) 6", "C) 0", "D) Compiler Error"], ans: 0 },
+
+        // Decision Making
+        { num: 9, topic: "Decision Making", q: "Which keyword is used to test multiple conditional expressions sequentially?", opts: ["A) else if", "B) switch", "C) break", "D) default"], ans: 0 },
+        { num: 10, topic: "Decision Making", q: "What will be printed by the following snippet?", code: "int a = 10, b = 20;\nif (a > b)\n    cout << \"A\";\nelse\n    cout << \"B\";", opts: ["A) A", "B) B", "C) AB", "D) Nothing"], ans: 1 },
+        { num: 11, topic: "Decision Making", q: "In a switch statement, what happens if a break keyword is omitted after a matching case?", opts: ["A) Compilation fails", "B) Switch terminates immediately", "C) Execution falls through to subsequent cases", "D) Program crashes"], ans: 2 },
+        { num: 12, topic: "Decision Making", q: "What is the output of this conditional statement?", code: "int x = 15;\nstring res = (x >= 10) ? \"Pass\" : \"Fail\";\ncout << res;", opts: ["A) Pass", "B) Fail", "C) 15", "D) Error"], ans: 0 },
+        { num: 13, topic: "Decision Making", q: "Which standard statement catches values that do not match any case in a switch block?", opts: ["A) else", "B) default", "C) catch", "D) break"], ans: 1 },
+        { num: 14, topic: "Decision Making", q: "What is the result of the following code?", code: "int val = 2;\nswitch(val) {\n    case 1: cout << \"One \";\n    case 2: cout << \"Two \";\n    case 3: cout << \"Three \";\n}", opts: ["A) Two", "B) Two Three ", "C) One Two Three", "D) Three"], ans: 1 },
+        { num: 15, topic: "Decision Making", q: "Can a switch statement evaluate a float or double variable as its controlling condition?", opts: ["A) Yes, always", "B) Yes, if converted", "C) No, switch expressions must evaluate to integral types", "D) Depends on compiler"], ans: 2 },
+
+        // Logics
+        { num: 16, topic: "Logics", q: "Which logical operator represents the logical AND operation in C++?", opts: ["A) &", "B) &&", "C) AND", "D) ||"], ans: 1 },
+        { num: 17, topic: "Logics", q: "What is the boolean result of the expression: (5 > 3) && (2 == 4)?", opts: ["A) true (1)", "B) false (0)", "C) Compiler Error", "D) Undefined"], ans: 1 },
+        { num: 18, topic: "Logics", q: "What is the output of the following logic check?", code: "bool a = true;\nbool b = !a;\ncout << (a || b);", opts: ["A) 0", "B) 1", "C) true", "D) false"], ans: 1 },
+        { num: 19, topic: "Logics", q: "Which operator is used to check equality between two values?", opts: ["A) =", "B) ==", "C) !=", "D) =>"], ans: 1 },
+        { num: 20, topic: "Logics", q: "What is 'Short-Circuit Evaluation' in C++ logical OR (||) operations?", opts: ["A) Evaluates both sides always", "B) Skips second operand if first is true", "C) Reverses the result", "D) Causes runtime error"], ans: 1 },
+        { num: 21, topic: "Logics", q: "What will cout << (10 != 10); output?", opts: ["A) 1", "B) 0", "C) true", "D) Error"], ans: 1 },
+        { num: 22, topic: "Logics", q: "Evaluate the expression: !( (4 > 2) || (1 > 5) ).", opts: ["A) 1", "B) 0", "C) True", "D) Error"], ans: 1 },
+
+        // Iterations & Loops
+        { num: 23, topic: "Iterations & Loops", q: "Which loop is guaranteed to execute its code block at least once?", opts: ["A) for loop", "B) while loop", "C) do-while loop", "D) foreach loop"], ans: 2 },
+        { num: 24, topic: "Iterations & Loops", q: "How many times will this loop execute?", code: "for(int i = 0; i < 5; i++) {\n    // loop body\n}", opts: ["A) 4 times", "B) 5 times", "C) 6 times", "D) Infinite times"], ans: 1 },
+        { num: 25, topic: "Iterations & Loops", q: "What statement is used to skip the current iteration and jump to the next loop cycle?", opts: ["A) break", "B) exit", "C) continue", "D) return"], ans: 2 },
+        { num: 26, topic: "Iterations & Loops", q: "What is the output of the following code snippet?", code: "int i = 1;\nwhile(i <= 3) {\n    cout << i << \" \";\n    i++;\n}", opts: ["A) 1 2 3 ", "B) 1 2 ", "C) 0 1 2 ", "D) 1 2 3 4 "], ans: 0 },
+        { num: 27, topic: "Iterations & Loops", q: "What happens in this loop?", code: "for(int i = 5; i > 0; i++) {\n    cout << i;\n}", opts: ["A) Prints 5 to 1", "B) Infinite loop (until overflow)", "C) Does not execute", "D) Syntax Error"], ans: 1 },
+        { num: 28, topic: "Iterations & Loops", q: "What will be printed by this code?", code: "for(int i = 1; i <= 5; i++) {\n    if (i == 3) break;\n    cout << i << \" \";\n}", opts: ["A) 1 2 3 ", "B) 1 2 ", "C) 1 2 4 5 ", "D) 3 "], ans: 1 },
+        { num: 29, topic: "Iterations & Loops", q: "In a do-while loop, where is the condition checked?", opts: ["A) At the beginning", "B) At the end of the loop body", "C) In the middle", "D) Simultaneously"], ans: 1 },
+        { num: 30, topic: "Iterations & Loops", q: "What is the final value of sum after the loop?", code: "int sum = 0;\nfor(int i = 1; i <= 3; i++) {\n    sum += i;\n}", opts: ["A) 3", "B) 5", "C) 6", "D) 12"], ans: 2 }
+    ];
+
+    let currentIdx = 0;
+    let userName = "";
+    let userAnswers = new Array(questions.length).fill(null);
+    let timerInterval = null;
+    let timeLeft = 20;
+
+    // DOM Elements
+    const startScreen = document.getElementById('start-screen');
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultsScreen = document.getElementById('results-screen');
+    const startForm = document.getElementById('start-form');
+    const timerDisplay = document.getElementById('timer');
+
+    startForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        userName = document.getElementById('username').value.trim();
+        if (!userName) return;
+        
+        startScreen.classList.remove('active');
+        quizScreen.classList.add('active');
+        loadQuestion(0);
+    });
+
+    function loadQuestion(index) {
+        clearInterval(timerInterval);
+        currentIdx = index;
+        
+        const q = questions[index];
+        document.getElementById('topic-badge').innerText = `Module: ${q.topic}`;
+        document.getElementById('question-tracker').innerText = `Question ${index + 1}/${questions.length}`;
+        document.getElementById('question-text').innerText = `Q${q.num}. ${q.q}`;
+        
+        // Render Code block if present
+        const codeBlock = document.getElementById('code-block');
+        if (q.code) {
+            codeBlock.innerHTML = `<pre><code>${escapeHtml(q.code)}</code></pre>`;
+        } else {
+            codeBlock.innerHTML = '';
+        }
+
+        // Render Options
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+        
+        q.opts.forEach((optText, optIdx) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            if (userAnswers[index] === optIdx) btn.classList.add('selected');
+            btn.innerText = optText;
+            btn.onclick = () => selectOption(optIdx);
+            optionsContainer.appendChild(btn);
+        });
+
+        // Reset & Start Timer
+        timeLeft = 20;
+        timerDisplay.innerText = timeLeft;
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            timerDisplay.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                nextQuestion();
+            }
+        }, 1000);
+    }
+
+    function selectOption(optIdx) {
+        userAnswers[currentIdx] = optIdx;
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach((btn, i) => {
+            btn.classList.toggle('selected', i === optIdx);
+        });
+    }
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+        clearInterval(timerInterval);
+        nextQuestion();
+    });
+
+    function nextQuestion() {
+        if (currentIdx < questions.length - 1) {
+            loadQuestion(currentIdx + 1);
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        quizScreen.classList.remove('active');
+        resultsScreen.classList.add('active');
+
+        let score = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === questions[idx].ans) score++;
+        });
+
+        const pct = Math.round((score / questions.length) * 100);
+
+        document.getElementById('res-name').innerText = userName;
+        document.getElementById('res-score').innerText = `${score} / ${questions.length}`;
+        document.getElementById('res-percentage').innerText = `Score: ${pct}%`;
+
+        // Motivational text
+        const motText = document.getElementById('motivation-text');
+        if (pct >= 80) {
+            motText.innerText = "Outstanding performance! You have built a rock-solid foundation in C++ basics and logic. Keep pushing forward into object-oriented concepts and data structures!";
+        } else if (pct >= 60) {
+            motText.innerText = "Solid job! You have a good grasp of C++ fundamentals. Revisit the questions you missed, test the code snippets in a compiler, and keep practicing!";
+        } else {
+            motText.innerText = "Great effort! Don't be discouraged—programming is about iteration and learning from mistakes. Review the syntax, practice loop logic, and keep trying!";
+        }
+
+        // Render Answer Key Table
+        const tbody = document.getElementById('answer-key-body');
+        tbody.innerHTML = '';
+        
+        for (let i = 0; i < 15; i++) {
+            const q1 = questions[i];
+            const q2 = questions[i + 15];
+
+            const uAns1 = userAnswers[i] !== null ? String.fromCharCode(65 + userAnswers[i]) : '-';
+            const cAns1 = String.fromCharCode(65 + q1.ans);
+
+            const uAns2 = userAnswers[i + 15] !== null ? String.fromCharCode(65 + userAnswers[i + 15]) : '-';
+            const cAns2 = String.fromCharCode(65 + q2.ans);
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>Q${q1.num}</td><td>${uAns1}</td><td><strong>${cAns1}</strong></td>
+                <td>Q${q2.num}</td><td>${uAns2}</td><td><strong>${cAns2}</strong></td>
+            `;
+            tbody.appendChild(row);
+        }
+    }
+
+    // Accordion Toggle for Answer Sheet
+    const toggleBtn = document.getElementById('toggle-key-btn');
+    const accordionContent = document.getElementById('accordion-content');
+    const arrowIcon = document.getElementById('arrow-icon');
+
+    toggleBtn.addEventListener('click', () => {
+        accordionContent.classList.toggle('open');
+        if (accordionContent.classList.contains('open')) {
+            accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
+            arrowIcon.innerText = "▲";
+        } else {
+            accordionContent.style.maxHeight = "0";
+            arrowIcon.innerText = "▼";
+        }
+    });
+
+    function escapeHtml(str) {
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+</script>
+</body>
+</html>
